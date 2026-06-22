@@ -1,0 +1,293 @@
+{% extends "base.html" %}
+{% block title %}PawDetect — About{% endblock %}
+
+{% block head %}
+<style>
+  .about-hero {
+    max-width: 720px;
+    margin: 64px auto 0;
+    padding: 0 24px;
+    text-align: center;
+  }
+
+  .about-hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(30px, 5vw, 52px);
+    font-weight: 800;
+    margin-bottom: 16px;
+    line-height: 1.1;
+  }
+
+  .about-hero p {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  /* ── STATS ROW ── */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 720px;
+    margin: 56px auto 0;
+    padding: 0 24px;
+  }
+
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 24px;
+    text-align: center;
+    transition: border-color .25s, transform .25s;
+  }
+
+  .stat-card:hover {
+    border-color: var(--muted);
+    transform: translateY(-3px);
+  }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--cat), var(--dog));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how-section {
+    max-width: 720px;
+    margin: 72px auto 0;
+    padding: 0 24px;
+  }
+
+  .how-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 32px;
+  }
+
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .step {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 24px;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity .5s ease, transform .5s ease, border-color .25s;
+  }
+
+  .step.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .step:hover { border-color: var(--muted); }
+
+  .step-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--bg);
+    background: linear-gradient(135deg, var(--cat), var(--dog));
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .step-content h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .step-content p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── MODEL CARD ── */
+  .model-section {
+    max-width: 720px;
+    margin: 56px auto 80px;
+    padding: 0 24px;
+  }
+
+  .model-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+
+  .model-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .model-prop { }
+
+  .model-prop-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .model-prop-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  @media (max-width: 600px) {
+    .stats         { grid-template-columns: 1fr; }
+    .model-card    { grid-template-columns: 1fr; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="about-hero">
+  <div class="section-eyebrow">How it works</div>
+  <h1>The Model Behind <span style="color:var(--cat)">the</span> <span style="color:var(--dog)">Magic</span></h1>
+  <p>A deep dive into the AI classifier powering PawDetect — built with a custom CNN trained from scratch.</p>
+</section>
+
+<div class="stats">
+  <div class="stat-card">
+    <div class="stat-num">99.9%</div>
+    <div class="stat-label">Validation Accuracy</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">160px</div>
+    <div class="stat-label">Input Image Size</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">2</div>
+    <div class="stat-label">Classes (Cat / Dog)</div>
+  </div>
+</div>
+
+<section class="how-section">
+  <div class="section-eyebrow">Process</div>
+  <h2>How a prediction works</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>Image Upload</h3>
+        <p>You upload a JPG, PNG, or WEBP photo. Flask receives it, saves it temporarily, and passes the file path to the model pipeline.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>Preprocessing</h3>
+        <p>The image is resized to 160×160 pixels and normalized using MobileNetV2's preprocessing function — scaling pixel values to the range [-1, 1] that the model expects.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h3>Feature Extraction</h3>
+        <p>Three convolutional layers progressively extract features from your image — edges and textures first, then shapes, then high-level patterns like fur or snouts.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h3>Classification</h3>
+        <p>A small trainable head (GlobalAveragePooling → Dropout → Dense with sigmoid) outputs a single number between 0 and 1. Below 0.5 → Cat. Above 0.5 → Dog.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h3>Result Display</h3>
+        <p>Flask sends the label and confidence score back to the browser. The result is also saved to prediction history so you can review past classifications.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="model-section">
+  <div class="section-eyebrow">Architecture</div>
+  <h2>Model details</h2>
+  <div class="model-card">
+    <div class="model-prop">
+      <div class="model-prop-label">Base Model</div>
+      <div class="model-prop-value">Custom CNN</div>
+    </div>
+    <div class="model-prop">
+      <div class="model-prop-label">Pretrained On</div>
+      <div class="model-prop-value"> Cats vs Dogs (Kaggle)</div>
+    </div>
+    <div class="model-prop">
+      <div class="model-prop-label">Task Type</div>
+      <div class="model-prop-value">Binary Classification</div>
+    </div>
+    <div class="model-prop">
+      <div class="model-prop-label">Training Strategy</div>
+      <div class="model-prop-value">Trained from scratch</div>
+    </div>
+    <div class="model-prop">
+      <div class="model-prop-label">Framework</div>
+      <div class="model-prop-value">TensorFlow / Keras</div>
+    </div>
+    <div class="model-prop">
+      <div class="model-prop-label">Output Activation</div>
+      <div class="model-prop-value">Sigmoid</div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Scroll-triggered step reveal
+  const steps = document.querySelectorAll('.step');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  steps.forEach(s => observer.observe(s));
+</script>
+{% endblock %}

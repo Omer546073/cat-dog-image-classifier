@@ -1,0 +1,26 @@
+[
+  {
+    "id": "b8aea142",
+    "label": "Cat",
+    "confidence": "100.0%",
+    "confidence_raw": 100.0,
+    "image": "static/uploads/62c00104.jpg",
+    "date": "Jun 22, 2026 \u00b7 12:40"
+  },
+  {
+    "id": "3709183e",
+    "label": "Cat",
+    "confidence": "93.7%",
+    "confidence_raw": 93.7,
+    "image": "static/uploads/8efd0977.jpg",
+    "date": "Jun 22, 2026 \u00b7 12:40"
+  },
+  {
+    "id": "65941569",
+    "label": "Dog",
+    "confidence": "100.0%",
+    "confidence_raw": 100.0,
+    "image": "static/uploads/2430797f.jpg",
+    "date": "Jun 22, 2026 \u00b7 12:01"
+  }
+]

@@ -1,0 +1,316 @@
+{% extends "base.html" %}
+{% block title %}PawDetect — Classify{% endblock %}
+
+{% block head %}
+<style>
+  .hero {
+    max-width: 680px;
+    margin: 64px auto 0;
+    padding: 0 24px;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 6vw, 60px);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 .gradient {
+    background: linear-gradient(135deg, var(--cat) 0%, var(--dog) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 480px;
+    margin: 0 auto 48px;
+  }
+
+  /* ── UPLOAD CARD ── */
+  .upload-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .dropzone {
+    border: 2px dashed var(--line);
+    border-radius: 12px;
+    padding: 48px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .25s, background .25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dropzone:hover, .dropzone.dragover {
+    border-color: var(--dog);
+    background: rgba(46,168,255,.04);
+  }
+
+  .dropzone input { display: none; }
+
+  .dz-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+    display: block;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-6px); }
+  }
+
+  .dz-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+
+  .dz-sub {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  #preview-wrap {
+    display: none;
+    margin-top: 16px;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  #preview-wrap img {
+    width: 100%;
+    max-height: 240px;
+    object-fit: cover;
+    display: block;
+  }
+
+  #preview-wrap .remove-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(0,0,0,.7);
+    border: none;
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .submit-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px;
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    border-radius: 10px;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity .2s, transform .15s;
+    letter-spacing: .02em;
+  }
+
+  .submit-btn:hover { opacity: .85; transform: translateY(-1px); }
+  .submit-btn:active { transform: translateY(0); }
+
+  /* ── RESULT ── */
+  .result-card {
+    max-width: 520px;
+    margin: 32px auto 64px;
+    padding: 0 24px;
+    animation: slideUp .5s cubic-bezier(.16,1,.3,1) both;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-inner {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .result-img {
+    width: 100%;
+    max-height: 280px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .result-body {
+    padding: 24px;
+  }
+
+  .result-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .result-conf-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    margin-top: 16px;
+  }
+
+  .result-conf-pct {
+    font-weight: 600;
+    font-family: 'Syne', sans-serif;
+  }
+
+  .try-again {
+    display: block;
+    text-align: center;
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    transition: color .2s, border-color .2s;
+  }
+
+  .try-again:hover { color: var(--ink); border-color: var(--muted); }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="section-eyebrow">AI Image Classifier</div>
+  <h1>Is it a <span class="gradient">Cat or Dog?</span></h1>
+  <p>Upload any photo and our AI model will tell you — instantly.</p>
+
+  {% if not result %}
+  <div class="upload-card">
+    <form method="POST" enctype="multipart/form-data" id="upload-form">
+      <label class="dropzone" id="dropzone">
+        <input type="file" name="file" id="file-input" accept="image/*" required>
+        <span class="dz-icon">🐾</span>
+        <div class="dz-title">Drop an image here</div>
+        <div class="dz-sub">or click to browse · JPG, PNG, WEBP</div>
+      </label>
+
+      <div id="preview-wrap">
+        <img id="preview-img" src="" alt="Preview">
+        <button type="button" class="remove-btn" id="remove-btn">✕</button>
+      </div>
+
+      <button type="submit" class="submit-btn">Identify →</button>
+    </form>
+  </div>
+  {% endif %}
+</section>
+
+{% if result %}
+<div class="result-card">
+  <div class="result-inner">
+    <img class="result-img" src="/{{ image_path }}" alt="Uploaded image">
+    <div class="result-body">
+      <div class="result-label">
+        {% if result.label == 'Cat' %}
+          <span class="cat-text">🐱 Cat</span>
+          <span class="tag tag-cat">{{ result.confidence }}</span>
+        {% else %}
+          <span class="dog-text">🐶 Dog</span>
+          <span class="tag tag-dog">{{ result.confidence }}</span>
+        {% endif %}
+      </div>
+
+      <div class="result-conf-label">
+        <span>Confidence</span>
+        <span class="result-conf-pct">{{ result.confidence }}</span>
+      </div>
+      <div class="conf-bar-wrap">
+        <div class="conf-bar {{ 'cat' if result.label == 'Cat' else 'dog' }}"
+             id="conf-bar"
+             data-width="{{ result.confidence_raw }}">
+        </div>
+      </div>
+
+      <a href="/" class="try-again">← Try another image</a>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<script>
+  const input     = document.getElementById('file-input');
+  const dropzone  = document.getElementById('dropzone');
+  const prevWrap  = document.getElementById('preview-wrap');
+  const prevImg   = document.getElementById('preview-img');
+  const removeBtn = document.getElementById('remove-btn');
+
+  if (input) {
+    input.addEventListener('change', () => {
+      if (input.files.length) showPreview(input.files[0]);
+    });
+  }
+
+  if (dropzone) {
+    dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+    dropzone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+      const f = e.dataTransfer.files[0];
+      if (f) { input.files = e.dataTransfer.files; showPreview(f); }
+    });
+  }
+
+  if (removeBtn) {
+    removeBtn.addEventListener('click', () => {
+      prevWrap.style.display = 'none';
+      prevImg.src = '';
+      input.value = '';
+    });
+  }
+
+  function showPreview(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      prevImg.src = e.target.result;
+      prevWrap.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // Animate confidence bar
+  const bar = document.getElementById('conf-bar');
+  if (bar) {
+    setTimeout(() => { bar.style.width = bar.dataset.width + '%'; }, 200);
+  }
+</script>
+{% endblock %}

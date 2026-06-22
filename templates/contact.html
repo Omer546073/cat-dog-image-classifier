@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+{% block title %}PawDetect — Contact{% endblock %}
+
+{% block head %}
+<style>
+  .contact-hero {
+    max-width: 720px;
+    margin: 64px auto 0;
+    padding: 0 24px;
+    text-align: center;
+  }
+
+  .contact-hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(30px, 5vw, 52px);
+    font-weight: 800;
+    margin-bottom: 16px;
+    line-height: 1.1;
+  }
+
+  .contact-hero p {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* ── TEAM ── */
+  .team-section {
+    max-width: 720px;
+    margin: 64px auto 0;
+    padding: 0 24px;
+  }
+
+  .team-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .team-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 28px 20px;
+    text-align: center;
+    transition: transform .25s, border-color .25s;
+  }
+
+  .team-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--muted);
+  }
+
+  .team-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--cat), var(--dog));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin: 0 auto 16px;
+  }
+
+  .team-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .team-role {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .team-links {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .team-link {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    text-decoration: none;
+    transition: color .2s, border-color .2s;
+  }
+
+  .team-link:hover { color: var(--ink); border-color: var(--muted); }
+
+  /* ── CONTACT INFO ── */
+  .contact-section {
+    max-width: 720px;
+    margin: 48px auto 80px;
+    padding: 0 24px;
+  }
+
+  .contact-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+
+  .contact-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .contact-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-decoration: none;
+    transition: transform .25s, border-color .25s;
+  }
+
+  .contact-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--muted);
+  }
+
+  .contact-icon {
+    font-size: 24px;
+    width: 48px;
+    height: 48px;
+    background: var(--surface);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .contact-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+
+ .contact-value {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 130px;   
+}
+
+  /* ── TECH STACK ── */
+  .stack-section {
+    max-width: 720px;
+    margin: 0 auto 80px;
+    padding: 0 24px;
+  }
+
+  .stack-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  .stack-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .stack-pill {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: border-color .2s;
+  }
+
+  .stack-pill:hover { border-color: var(--muted); }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="contact-hero">
+  <div class="section-eyebrow">The Team</div>
+  <h1>Built with 🐾 and Python</h1>
+  <p>PawDetect is a learning project that combines Flask web development with computer vision and transfer learning.</p>
+</section>
+
+<section class="team-section">
+  <div class="section-eyebrow">Creators</div>
+  <h2>Meet the team</h2>
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-avatar">🧑‍💻</div>
+      <div class="team-name">Omer</div>
+      <div class="team-role">ML Engineer · Flask Dev</div>
+      <div class="team-links">
+        <a href="https://github.com/Omer546073" class="team-link" target="_blank">GitHub</a>
+        <a href="https://www.linkedin.com/in/omer-farooq-09987a353?utm_source=share_via&utm_content=profile&utm_medium=member_android" class="team-link" target="_blank">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact-section">
+  <div class="section-eyebrow">Get in touch</div>
+  <h2>Contact</h2>
+  <div class="contact-cards">
+    <a href="mailto:umerfarooq546073@gmail.com" class="contact-card">
+      <div class="contact-icon">✉️</div>
+      <div>
+        <div class="contact-label">Email</div>
+        <div class="contact-value">umerfarooq546073@email.com</div>
+      </div>
+    </a>
+    <a href="https://github.com/Omer546073/cat-dog-image-classifier.git" target="_blank" class="contact-card">
+      <div class="contact-icon">🐙</div>
+      <div>
+        <div class="contact-label">GitHub</div>
+        <div class="contact-value">View source code</div>
+      </div>
+    </a>
+    <a href="https://www.kaggle.com/datasets/bhavikjikadara/dog-and-cat-classification-dataset?" target="_blank" class="contact-card">
+      <div class="contact-icon">📊</div>
+      <div>
+        <div class="contact-label">Kaggle</div>
+        <div class="contact-value">Cats vs Dogs</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<section class="stack-section">
+  <div class="section-eyebrow">Built with</div>
+  <h2>Tech stack</h2>
+  <div class="stack-pills">
+    <div class="stack-pill">🐍 Python 3.12</div>
+    <div class="stack-pill">⚗️ Flask</div>
+    <div class="stack-pill">🧠 TensorFlow</div>
+    <div class="stack-pill">🖼️ Keras</div>
+    <div class="stack-pill">🔢 NumPy</div>
+    <div class="stack-pill">🖼️ Pillow</div>
+    <div class="stack-pill">📦 Kaggle Dataset</div>
+  </div>
+</section>
+{% endblock %}
